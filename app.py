@@ -175,6 +175,9 @@ def load_realizado() -> pd.DataFrame:
     df["Nome do Mês"] = df["Dta. Carga"].dt.month.map(MESES_PT)
     df["Transportadora_norm"] = df.apply(_normalize_transportador, axis=1)
     df = df.drop_duplicates(subset=["Empresa", "Carga CF"])
+    junho_apos = df[df["Dta. Carga"].dt.month == 6]
+    st.write("Junho após drop_duplicates:", len(junho_apos))
+    st.write("Transportadoras de Junho:", junho_apos["Transportadora_norm"].value_counts().to_dict())
     df["Qtd_Cargas"] = 1
     return df
 
