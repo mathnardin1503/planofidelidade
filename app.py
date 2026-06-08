@@ -159,7 +159,7 @@ def load_realizado() -> pd.DataFrame:
         st.error("Nenhum arquivo .xlsx encontrado na pasta de rede.")
         st.stop()
     df = pd.concat([pd.read_excel(f) for f in arquivos], ignore_index=True)
-    df["Dta. Carga"] = pd.to_datetime(df["Dta. Carga"], infer_datetime_format=True, errors="coerce")
+    df["Dta. Carga"] = pd.to_datetime(df["Dta. Carga"], errors="coerce")
     df = df[~df["Empresa"].astype(str).str.startswith("Total")]
     df = df[~df["Empresa"].astype(str).str.startswith("Filtros aplicados")]
     df = df[df["Empresa"].astype(str).str.strip() != "nan"]
