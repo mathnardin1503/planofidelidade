@@ -159,6 +159,8 @@ def load_realizado() -> pd.DataFrame:
         st.error("Nenhum arquivo .xlsx encontrado na pasta de rede.")
         st.stop()
     df = pd.concat([pd.read_excel(f) for f in arquivos], ignore_index=True)
+    st.write("Total linhas brutas:", len(df))
+    st.write("Meses encontrados:", df["Dta. Carga"].dt.month.value_counts().to_dict() if "Dta. Carga" in df.columns else "coluna não encontrada")
     df["Dta. Carga"] = pd.to_datetime(df["Dta. Carga"], errors="coerce")
     df = df[~df["Empresa"].astype(str).str.startswith("Total")]
     df = df[~df["Empresa"].astype(str).str.startswith("Filtros aplicados")]
