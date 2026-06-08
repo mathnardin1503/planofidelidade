@@ -166,6 +166,9 @@ def load_realizado() -> pd.DataFrame:
     df = df[~df["Empresa"].astype(str).str.startswith("Filtros aplicados")]
     df = df[df["Empresa"].astype(str).str.strip() != "nan"]
     df["Estado"] = df["Empresa"].map(EMPRESA_ESTADO)
+    junho = df[df["Dta. Carga"].dt.month == 6]
+    st.write("Junho antes do filtro Estado:", len(junho))
+    st.write("Empresas de Junho sem mapeamento:", junho[junho["Estado"].isna()]["Empresa"].unique().tolist())
     df = df[df["Estado"].notna()]
     df = df[df["Dta. Carga"].notna()].copy()
     df["Ano"] = df["Dta. Carga"].dt.year.astype(int)
