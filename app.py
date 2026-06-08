@@ -140,11 +140,21 @@ def _normalize_transportador(row: pd.Series) -> str:
     return row.get("Transportador", "Outros")
 
 
-@st.cache_data
 @st.cache_data(ttl=3600, show_spinner="Carregando, Aguarde...")
 def load_realizado() -> pd.DataFrame:
-    pasta = Path(r"\\btserver001\CSC_Transportes\Primária\Gestão\Matheus Nardin\Bases de Dados\Base Frete Power BI")
-    arquivos = list(pasta.glob("*.xlsx"))
+    pasta_local = Path("data/cargas/")
+    pasta_rede  = Path(r"\\btserver001\CSC_Transportes\Primária\Gestão\Matheus Nardin\Bases de Dados\Base Frete Power BI")
+
+    if pasta_local.exists() and any(pasta_local.glob("*.xlsx")):
+        pasta = pasta_local
+    else:
+        pasta = pasta_rede
+
+    arquivos = [
+        f for f in pasta.glob("*.xlsx")
+        if not f.name.startswith("~$")
+        and "2025" not in f.name
+    ]
     if not arquivos:
         st.error("Nenhum arquivo .xlsx encontrado na pasta de rede.")
         st.stop()
